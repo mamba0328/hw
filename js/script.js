@@ -20,9 +20,25 @@ const eggs = new Product('eggs', 10, 4.7, true);
 const shopingCart = {
     products: [bread, milk, eggs],
 
-    sortedProducts() {
-        const sortedProducts = this.products.sort((product) => product.isBought ? -1 : 1);
-        return sortedProducts
+    sortedProducts(type = 0) {
+        switch (type) {
+            case -1: {
+                const sortedProducts = this.products.sort((prev, next) => prev.cost > next.cost ? 1 : prev.cost < next.cost ? -1 : 0);
+                console.log(sortedProducts)
+                return sortedProducts
+            }
+            case 1: {
+                console.log('>0')
+                const sortedProducts = this.products.sort((prev, next) => prev.cost > next.cost ? -1 : prev.cost < next.cost ? 1 : 0);
+                return sortedProducts
+            }
+            default: {
+                console.log('=')
+                const sortedProducts = this.products.sort((product) => product.isBought ? -1 : 1);
+                return sortedProducts
+            }
+        }
+
     },
 
     logProducts(subj, message = '') {
@@ -62,9 +78,13 @@ const shopingCart = {
         }
     },
 
-    getOverallCost() {
-        const reducedAmount = this.products.reduce((prev, next) => {
-            //here
+    returnUnbought() {
+        return this.products.filter(product => !product.isBought)
+    },
+
+    getOverallCost(arr) {
+        const reducedAmount = arr.reduce((prev, next) => {
+            return prev + next.cost; //i don't use prev.cost because prev here is just a num; 
         }, 0);
         return reducedAmount
     }
@@ -75,4 +95,7 @@ shopingCart.removeProduct('eggs');
 shopingCart.addProduct('milk');
 shopingCart.addProduct('eggs', 100);
 shopingCart.logProducts(shopingCart.sortedProducts(), 'Your products:');
-shopingCart.logProducts(shopingCart.getOverallCost(), 'Overall cost is:');
+shopingCart.logProducts(shopingCart.sortedProducts(-1), 'Your products:');
+shopingCart.logProducts(shopingCart.sortedProducts(1), 'Your products:');
+shopingCart.logProducts(shopingCart.getOverallCost(shopingCart.products), 'Overall cost is:');
+shopingCart.logProducts(shopingCart.getOverallCost(shopingCart.returnUnbought()), 'Overall cost is:'); 
