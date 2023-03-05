@@ -20,25 +20,18 @@ const eggs = new Product('eggs', 10, 4.7, true);
 const shopingCart = {
     products: [bread, milk, eggs],
 
-    sortedProducts(type = 0) {
-        switch (type) {
-            case -1: {
-                const sortedProducts = this.products.sort((prev, next) => prev.cost > next.cost ? 1 : prev.cost < next.cost ? -1 : 0);
-                console.log(sortedProducts)
-                return sortedProducts
+    sortProducts(type = 0) {
+        switch(type) {
+            case 1: { 
+                return this.products.slice().sort((a, b) => b.cost - a.cost)
             }
-            case 1: {
-                console.log('>0')
-                const sortedProducts = this.products.sort((prev, next) => prev.cost > next.cost ? -1 : prev.cost < next.cost ? 1 : 0);
-                return sortedProducts
+            case -1: { 
+                return this.products.slice().sort((a, b) => a.cost - b.cost)
             }
-            default: {
-                console.log('=')
-                const sortedProducts = this.products.sort((product) => product.isBought ? -1 : 1);
-                return sortedProducts
+            default:{ 
+                return this.products.slice().sort((product) => product.isBought ? -1 : 1)
             }
         }
-
     },
 
     logProducts(subj, message = '') {
@@ -94,8 +87,8 @@ shopingCart.buyProduct('milk');
 shopingCart.removeProduct('eggs');
 shopingCart.addProduct('milk');
 shopingCart.addProduct('eggs', 100);
-shopingCart.logProducts(shopingCart.sortedProducts(), 'Your products:');
-shopingCart.logProducts(shopingCart.sortedProducts(-1), 'Your products:');
-shopingCart.logProducts(shopingCart.sortedProducts(1), 'Your products:');
+shopingCart.logProducts(shopingCart.sortProducts(), 'Your products:');
+shopingCart.logProducts(shopingCart.sortProducts(-1), 'Your products:');
+shopingCart.logProducts(shopingCart.sortProducts(1), 'Your products:');
 shopingCart.logProducts(shopingCart.getOverallCost(shopingCart.products), 'Overall cost is:');
 shopingCart.logProducts(shopingCart.getOverallCost(shopingCart.returnUnbought()), 'Overall cost is:'); 
